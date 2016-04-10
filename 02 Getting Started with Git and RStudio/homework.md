@@ -35,7 +35,7 @@ psychology classes-->
 
 <!--Make the following bold and italicized-->
 
-***This should be bold and in italics.****
+***This should be bold and in italics.***
 
 <!--Create a link to one of your favorite websites-->
 My favorite website is [YouTube](www.youtube.com)
