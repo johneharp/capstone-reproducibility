@@ -1,3 +1,6 @@
+---
+output: html_document
+---
 ## Homework 3
 
 <!--
@@ -17,28 +20,47 @@ No Rchunk is needed to accomplish this.
 Read in the homework3.csv data. For each of the following steps you
 should preface your R commands with some plain English explanation.
 -->
-
+This is where I read in the data.
+```{r}
+dat<-read.csv("homework3.csv")
+```
 
 
 <!--
 Check the structure of the data.
 -->
-
+This is where I checked the structure of the data.
+```{r}
+str(dat)
+```
 
 
 <!--
 Find the mean, median, and standard deviation using the sd() function
 for the overall level of conservatism.
 -->
+Here I will find the mean, median, and standard deviation for the level of conservatism.
+```{r}
+mean(dat$conservatism)
+median(dat$conservatism)
+sd(dat$conservatism)
+```
 
-
+The mean is 52.3, the median is 53.8, and the standard deviation is 19.6
 
 <!--
 Find the mean level of support for freshmen only.
 -->
-
-
+Here I will find the mean level of conservatism for Freshman only.
+```{r}
+mean(dat$conservatism[dat$year=="freshman"])
+```
+The mean level of conservatism for Freshman only is 47.5
 
 <!--
 Find the mean level of support for sophomore business students only.
 -->
+Here I will find the mean level of conservatism for Sophomore Business students only.
+mean(dat$conservatism[dat$year=="sophomore" & dat$major=="business"])
+```
+The mean for this is 61.6
