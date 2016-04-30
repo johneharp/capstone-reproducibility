@@ -16,21 +16,29 @@ No Rchunk is needed to accomplish this.
 <!--
 Read in the homework4.csv data. For each of the following steps you
 should preface your R commands with some plain English explanation.
+This is where I read in the data.
 -->
+```{r}
+dat<-read.csv("homework4.csv")
+```
 
-
-
+Now, I must check the structure of the data.
 <!--
 Check the structure of the data.
 -->
+```{r}
+str(dat)
+```
 
-
-
+Here I created a table that shows how many people are in each catagory.
 <!--
 Create a table that shows how many people fell into each category.
 -->
+mytable<-table(dat$agreement,dat$condition)
 
-
+```{r}
+table(dat$agreement, dat$condition)
+```
 
 <!--
 Perform a chi-square test to determine whether or not the experimental
@@ -40,4 +48,7 @@ statement that supports your interpretation. As there's no way to
 insert the chi-square symbol, you can just use chi-square instead
 (see example4.Rmd).
 -->
+Here I performed a chi-square test to determine if the agreements and conditions are related.
+chisq.test(dat$agreement, dat$condition)
 
+According the the results of the chi-test, the experiment didn't affect many of the people.
