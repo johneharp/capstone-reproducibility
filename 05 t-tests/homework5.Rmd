@@ -14,20 +14,33 @@ The data are fabricated and include the number of words per minute
 that people can type when listening to no music and when listening
 to heavy metal.
 -->
-
+Here I read in the data.
+```{r}
+dat<-read.csv("homework5.csv")
+```
 
 
 <!--
 Check the structure of the data.
 -->
+Next, I must check the structure of the data.
+```{r}
+str(dat)
+```
+You can see that dat has two variables: music and wpm
 
-
+Here I will find the mean words per minute for the two groups.
 
 <!--
 Find the mean words per minute for the two groups.
 -->
+  
+```{r}
+mean(dat$wpm[dat$music=="metal"])
+mean(dat$wpm[dat$music=="none"])
+```
 
-
+The mean for the metal group is 48.03665, and the mean for the none group is 42.44641. Therefore, we can see that the none group completed the task faster.
 
 <!--
 Run an independent t-test to determine if the mean wpm for the
@@ -35,23 +48,96 @@ no music group is different from the mean wpm from heavy metal
 group. Interpret the results of your analysis after you run it.
 -->
 
-
-
+Now I'll run an independent t-test to see if my interpretation was correct.
+```{r}
+t.test(dat$wpm[dat$music=="metal"],
+       dat$wpm[dat$music=="none"],
+       var.equal=TRUE)
+```
+These results show that the none group performed the tasks faster than the metal.
 <!--
 Run another independent t-test with the alternative hypothesis that
 the heavy metal group types faster than the no music group. Interpret
 the results of your analyses.
 -->
+Now, I'll run an independent t-test with the alternative hypothesis that the experimental group is faster than the control group.
 
+```{r}
+t.test(dat$wpm[dat$music=="metal"],
+       dat$wpm[dat$music=="none"],
+       var.equal=TRUE,
+       alternative="greater")
+```
 
 
 <!--
 Create a bar graph of the data.
 -->
+In order to create a bar graph of the data, I need to load the ggplot2, gplots, and dplyr libraries.
 
 
+install.packages("ggplot2")
+install.packages("gplots")
+install.packages("dplyr")
 
+```{r}
+library(ggplot2)
+library(gplots)
+library(dplyr)
+```
+Next I need to use dplyr to summarize the data and find the means and standard errors of the means for the different groups.
+
+```{r}
+temp<-dat%>%group_by(music)%>%
+  summarize(means=mean(wpm), sems=sd(wpm)/sqrt(length(wpm)))
+```
+
+With this data, I can now make a graph.
+```{r}
+f<-ggplot(temp,aes(x=factor(music),y=means))+
+  geom_bar(stat="identity", color="black",
+           fill=c("deepskyblue2", "deeppink"))+
+  geom_errorbar(aes(ymax=means+sems,
+                    ymin=means-sems),
+                width=.2)+
+  ggtitle("Words per minute based on music")+
+  labs(x="Music", y="Words Per Minute (wpm)")+
+  scale_x_discrete(breaks=c("metal","none"),
+                   labels=c("metal","none"))+
+  theme(plot.title=element_text(size=15,
+                                face="bold",
+                                vjust=.5))+
+  theme(axis.title.x=element_text(size=12,
+                                  face="bold",
+                                  vjust=-.25))+
+  theme(axis.title.y=element_text(size=12,
+                                  face="bold",
+                                  vjust=.25))+
+  theme(axis.text.x=element_text(size=10,
+                                 face="bold",
+                                 color="black"))+
+  theme(axis.text.y=element_text(size=10,
+                                 face="bold",
+                                 color="black"))+
+  coord_cartesian(ylim=c(min(temp$means)-2*max(temp$sems),
+                         max(temp$means)+2*max(temp$sems)))+
+  theme(panel.border=element_blank(),
+        axis.line=element_line())+
+  theme(panel.grid.major.x=element_blank())+
+  theme(panel.grid.major.y=element_line(color="darkgrey"))+
+  theme(panel.grid.minor.y=element_blank())
+f
+```
 <!--
 Conduct and interpret a two-tailed paired t-test on the data.
 -->
 
+Next, I will conduct and interpret a two-tailed paired t-test with the data.
+
+```{r}
+t.test(dat$wpm[dat$music=="metal"],
+       dat$wpm[dat$music=="none"],
+       var.equal=TRUE,
+       paired=TRUE)
+```
+Individuals in the none condition completed the task more quickly than individuals in the metal condition.
